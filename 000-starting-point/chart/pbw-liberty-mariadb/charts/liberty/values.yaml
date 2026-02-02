@@ -1,0 +1,19 @@
+k8sNamespace: changeme
+user: default
+image:
+  repository: djccarew/pbw-mysql
+  name: pbw-mysql
+  tag: "1.0"
+  pullPolicy: Always
+
+ingress:
+  enabled: false
+
+service:
+  type: NodePort
+  internalPort: 9080
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

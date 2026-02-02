@@ -1,0 +1,45 @@
+# Default values for pbw-liberty-MariaDB.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+liberty:
+  enabled: true
+  replicaCount: 1
+  database:
+    port: "3306"
+    user: pbwadmin
+    password: l1bertyR0cks
+  image:
+    name: pbw-mariadb-web
+    tag: "1.0.0"
+    registry: "mycluster.icp:8500"
+    namespace: changeme
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 300m
+      memory: 250Mi
+    requests:
+      cpu: 5m
+      memory: 250Mi
+
+
+ibm-mariadb-dev:
+  enabled: true
+  replicaCount: 1
+  persistence:
+    enabled: false
+  database:
+    user: pbwadmin
+    password: l1bertyR0cks
+    name: plantsdb
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 5m
+      memory: 250Mi
+  service:
+    port: 3306
+    type: ClusterIP

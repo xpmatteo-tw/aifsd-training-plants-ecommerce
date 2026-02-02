@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: pbw-liberty-mariadb
+    component: web-app
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name | quote }}
+    tier: frontend
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+         app: pbw-liberty-mariadb
+         component: web-app
+         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+         release: {{ .Release.Name | quote }}
+         tier: frontend
+
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-liberty
+        image: "{{ .Values.image.registry }}/{{ .Values.image.namespace }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.internalPort }}
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name:  {{ .Release.Name }}-{{ .Chart.Name }}-secrets
+              key: maria-db-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name:  {{ .Release.Name }}-{{ .Chart.Name }}-secrets
+              key: maria-db-password
+        - name: DB_HOST
+          value: {{ .Release.Name }}-ibm-mariadb-dev
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name:  {{ .Release.Name }}-{{ .Chart.Name }}-secrets
+              key: maria-db-port
